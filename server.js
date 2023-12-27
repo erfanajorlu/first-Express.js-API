@@ -16,11 +16,31 @@ const friends = [
 ];
 
 app.use((req, res, next) => {
-    const start = Date.now();
-    next();
-    const delta = Date.now() - start;
-    console.log(`${req.url} ${req.method} ${delta}ms`);
+  const start = Date.now();
+  next();
+  const delta = Date.now() - start;
+  console.log(`${req.url} ${req.method} ${delta}ms`);
 });
+
+app.use(express.json());
+
+
+app.post('/friends' ,(req , res) => {
+    if(!req.body.name){
+        return res.status(400).json({
+            error : "Missing friend name"
+        })
+    }
+    
+    const newFriend = {
+        name : req.body.name,
+        id : friends.length 
+    }
+    friends.push(newFriend);
+    res.json(newFriend)
+
+})
+
 
 app.get("/friends", (req, res) => {
   res.status(200).json(friends);
